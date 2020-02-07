@@ -9,7 +9,7 @@ use serenity::{
 };
 use std::{collections::HashSet, env, sync::Arc};
 
-use commands::{math::*, meta::*, owner::*};
+use commands::{front::*, meta::*, owner::*};
 struct ShardManagerContainer;
 
 impl TypeMapKey for ShardManagerContainer {
@@ -29,7 +29,7 @@ impl EventHandler for Handler {
 }
 
 #[group]
-#[commands(multiply, ping, quit)]
+#[commands(front, ping, quit)]
 struct General;
 
 fn main() {
