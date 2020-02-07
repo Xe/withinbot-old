@@ -1,3 +1,4 @@
+{}:
 let
   moz_overlay = import (builtins.fetchTarball
     "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz");
@@ -7,7 +8,8 @@ let
     rustc = pkgs.latest.rustChannels.nightly.rust;
     cargo = pkgs.latest.rustChannels.nightly.rust;
   };
-in naersk.buildPackage {
+pkg = naersk.buildPackage {
   src = ./.;
   buildInputs = [ pkgs.openssl pkgs.pkg-config ];
-}
+};
+in pkg

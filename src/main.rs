@@ -10,6 +10,8 @@ use serenity::{
 use std::{collections::HashSet, env, sync::Arc};
 
 use commands::{front::*, meta::*, owner::*};
+mod mi;
+
 struct ShardManagerContainer;
 
 impl TypeMapKey for ShardManagerContainer {
@@ -57,7 +59,12 @@ fn main() {
 
     client.with_framework(
         StandardFramework::new()
-            .configure(|c| c.owners(owners).prefix("~"))
+            .configure(|c| {
+                c.owners(owners)
+                    .prefix("~")
+                    .on_mention(None)
+                    .no_dm_prefix(true)
+            })
             .help(&commands::help::MY_HELP)
             .group(&GENERAL_GROUP),
     );
