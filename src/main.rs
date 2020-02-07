@@ -31,8 +31,12 @@ impl EventHandler for Handler {
 }
 
 #[group]
-#[commands(front, ping, quit)]
+#[commands(about, ping, quit)]
 struct General;
+
+#[group]
+#[commands(front)]
+struct Within;
 
 fn main() {
     kankyo::load().expect("Failed to load .env file");
@@ -66,7 +70,8 @@ fn main() {
                     .no_dm_prefix(true)
             })
             .help(&commands::help::MY_HELP)
-            .group(&GENERAL_GROUP),
+            .group(&GENERAL_GROUP)
+            .group(&WITHIN_GROUP),
     );
 
     if let Err(why) = client.start() {

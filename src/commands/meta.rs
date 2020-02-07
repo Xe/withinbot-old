@@ -1,8 +1,7 @@
-use serenity::prelude::*;
-use serenity::model::prelude::*;
-use serenity::framework::standard::{
-    CommandResult,
-    macros::command,
+use serenity::{
+    framework::standard::{macros::command, CommandResult},
+    model::prelude::*,
+    prelude::*,
 };
 
 #[command]
@@ -11,3 +10,16 @@ fn ping(ctx: &mut Context, msg: &Message) -> CommandResult {
 
     Ok(())
 }
+
+#[command]
+fn about(ctx: &mut Context, msg: &Message) -> CommandResult {
+    if let Err(why) = msg
+        .channel_id
+        .say(&ctx.http, "This is a first Rust project. See https://github.com/Xe/withinbot for more information.")
+    {
+        println!("Error sending message: {:?}", why);
+    }
+
+    Ok(())
+}
+
