@@ -1,0 +1,38 @@
+{
+    "naersk": {
+        "branch": "master",
+        "description": "Build rust crates in Nix. No configuration, no code generation. IFD and sandbox friendly.",
+        "homepage": "",
+        "owner": "nmattia",
+        "repo": "naersk",
+        "rev": "4225dfaff988ce0713bc1cbf9a2a6dab8982df15",
+        "sha256": "13qbd5yjpw2qbsn2wxhzmjznqb8hf7sch1fdnjw904gj88wmnqnw",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/naersk/archive/4225dfaff988ce0713bc1cbf9a2a6dab8982df15.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "2ecfd86b631714b457e56d70dd83fa60435baeb6",
+        "sha256": "01j6727cws8blg1npp54b4w6xa0gpgyzhyws2vqgp8clnlnmqqhi",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/2ecfd86b631714b457e56d70dd83fa60435baeb6.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "nixos-19.09",
+        "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
+        "homepage": "https://github.com/NixOS/nixpkgs",
+        "owner": "NixOS",
+        "repo": "nixpkgs-channels",
+        "rev": "2de9367299f325c2b2021a44c2f63c810f8ad023",
+        "sha256": "05qm63r5qjf9f1m5srxxkrp09p6x7mxxj2flrlahbgyz3swgvg12",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs-channels/archive/2de9367299f325c2b2021a44c2f63c810f8ad023.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}
