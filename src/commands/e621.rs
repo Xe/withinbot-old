@@ -1,5 +1,5 @@
 use log::{error, info};
-use rs621::client::Client;
+use xe621::client::Client;
 use serde::*;
 use serenity::{
     framework::standard::{

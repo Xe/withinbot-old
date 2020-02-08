@@ -1468,18 +1468,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rs621"
-version = "0.5.0-alpha2"
-source = "git+https://github.com/Xe-forks/rs621?branch=hack#b6cb945e22ba37d5cef634ce05570b65889654ca"
-dependencies = [
- "chrono",
- "custom_error",
- "reqwest 0.9.24",
- "serde_json",
- "urlencoding",
-]
-
-[[package]]
 name = "rustc-demangle"
 version = "0.1.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2395,11 +2383,11 @@ dependencies = [
  "lazy_static",
  "log",
  "reqwest 0.10.1",
- "rs621",
  "serde",
  "serde_json",
  "serenity",
  "url 2.1.1",
+ "xe621",
 ]
 
 [[package]]
@@ -2410,4 +2398,17 @@ checksum = "d59cefebd0c892fa2dd6de581e937301d8552cb44489cdff035c6187cb63fa5e"
 dependencies = [
  "winapi 0.2.8",
  "winapi-build",
+]
+
+[[package]]
+name = "xe621"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "968631bdec85051544eafe81ef608987b19b0c9dffad3c4d7d470a9a2d99ac53"
+dependencies = [
+ "chrono",
+ "custom_error",
+ "reqwest 0.9.24",
+ "serde_json",
+ "urlencoding",
 ]
