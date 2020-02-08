@@ -1,12 +1,12 @@
 let
-  moz_overlay = import (builtins.fetchTarball
-  "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz");
-  pkgs = import <nixpkgs> { overlays = [ moz_overlay ]; };
+  pkgs = import <nixpkgs> { };
   sources = import ./nix/sources.nix;
-in
-pkgs.mkShell {
+in pkgs.mkShell {
   buildInputs = [
-    pkgs.latest.rustChannels.nightly.rust
+    pkgs.rustc
+    pkgs.rustfmt
+    pkgs.rls
+    pkgs.cargo
     pkgs.openssl
     pkgs.pkg-config
     sources.niv
