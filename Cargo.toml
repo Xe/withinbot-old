@@ -15,7 +15,12 @@ lazy_static = "1.4"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 chrono = "0.4"
+url = "2.1"
 
 [dependencies.serenity]
 version = "0.8"
 features = ["cache", "framework", "standard_framework", "rustls_backend"]
+
+[dependencies.rs621]
+git = "https://github.com/Xe-forks/rs621"
+branch = "hack"

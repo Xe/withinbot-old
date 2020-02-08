@@ -9,7 +9,7 @@ use serenity::{
 };
 use std::{collections::HashSet, env, sync::Arc};
 
-use commands::{front::*, meta::*, owner::*};
+use commands::{e621::*, front::*, meta::*, owner::*};
 mod mi;
 
 struct ShardManagerContainer;
@@ -38,6 +38,10 @@ struct General;
 #[commands(front)]
 struct Within;
 
+#[group]
+#[commands(get_post, search)]
+struct E621;
+
 fn main() {
     kankyo::load().expect("Failed to load .env file");
     env_logger::init();
@@ -51,12 +55,12 @@ fn main() {
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
     }
 
-    let owners = match client.cache_and_http.http.get_current_application_info() {
+    let (owners, bot_id) = match client.cache_and_http.http.get_current_application_info() {
         Ok(info) => {
             let mut set = HashSet::new();
             set.insert(info.owner.id);
 
-            set
+            (set, info.id)
         }
         Err(why) => panic!("Couldn't get application info: {:?}", why),
     };
@@ -66,12 +70,16 @@ fn main() {
             .configure(|c| {
                 c.owners(owners)
                     .prefix("~")
-                    .on_mention(None)
+                    .on_mention(Some(bot_id))
                     .no_dm_prefix(true)
             })
             .help(&commands::help::MY_HELP)
+            .normal_message(|ctx, msg| {
+                commands::e621::resolve_links(ctx, msg);
+            })
             .group(&GENERAL_GROUP)
-            .group(&WITHIN_GROUP),
+            .group(&WITHIN_GROUP)
+            .group(&E621_GROUP),
     );
 
     if let Err(why) = client.start() {

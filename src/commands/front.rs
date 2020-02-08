@@ -1,6 +1,6 @@
-use crate::mi;
+use crate::mi::{client::CLIENT, switch::Switch};
 use chrono::prelude::*;
-use log::info;
+use log::error;
 use serenity::{
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::*,
@@ -11,7 +11,7 @@ use std::ops::Sub;
 
 #[command]
 pub fn front(ctx: &mut Context, msg: &Message, _args: Args) -> CommandResult {
-    let current_front: mi::switch::Switch = mi::client::CLIENT
+    let current_front: Switch = CLIENT
         .get("https://mi.within.website/switches/current")
         .send()?
         .json()?;
@@ -30,7 +30,7 @@ pub fn front(ctx: &mut Context, msg: &Message, _args: Args) -> CommandResult {
         .build();
 
     if let Err(why) = msg.channel_id.say(&ctx.http, &response) {
-        println!("Error sending message: {:?}", why);
+        error!("Error sending message: {:?}", why);
     }
 
     Ok(())
