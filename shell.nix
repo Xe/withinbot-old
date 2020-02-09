@@ -9,5 +9,6 @@ in pkgs.mkShell {
     pkgs.openssl
     pkgs.pkg-config
     pkgs.niv
+    pkgs.rls
   ];
 }
