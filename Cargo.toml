@@ -16,6 +16,7 @@ serde = { version = "1.0", features = ["derive"] }
 chrono = "0.4"
 url = "2.1"
 xe621 = "0.6.3"
+rand = "0"
 
 [dependencies.serenity]
 version = "0.8"

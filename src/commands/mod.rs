@@ -3,3 +3,4 @@ pub mod front;
 pub mod meta;
 pub mod help;
 pub mod owner;
+pub mod printerfacts;

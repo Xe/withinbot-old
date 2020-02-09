@@ -23,6 +23,12 @@ This fetches information about a given e621 post by ID.
 
 This performs a search for any number of tags and prints the top 3 results.
 
+## General Commands
+
+### `printerfact`
+
+This grabs an amusing fact about printers.
+
 ## Message Scrapers
 
 This bot also scrapes e621 image links in NSFW chatrooms and links their

@@ -65,10 +65,14 @@ pub fn search(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     for post in cli.post_search(&tags[..]).take(3) {
         let mut p = post?;
-        response
-            .push(format!("{} - {}", p.id, p.rating))
-            .push(format!(" - {:?} - {:?}", p.artists, p.tags.truncate(10)))
-            .push(format!(" {}\n", p.file_url.unwrap()));
+        response.push(format!(
+            "{} - {} - {:?} - {:?} {}\n",
+            p.id,
+            p.rating,
+            p.artists,
+            p.tags.truncate(10),
+            p.file_url.unwrap()
+        ));
     }
 
     if let Err(why) = msg.channel_id.say(&ctx.http, &response.build()) {
