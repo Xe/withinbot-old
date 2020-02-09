@@ -12,15 +12,26 @@ use serenity::{
     prelude::*,
     utils::MessageBuilder,
 };
+use std::sync::{Arc, Mutex};
 use url::Url;
 use xe621::client::Client;
 
-static APP_USER_AGENT: &str = concat!(
+pub static APP_USER_AGENT: &str = concat!(
     env!("CARGO_PKG_NAME"),
     "/",
     env!("CARGO_PKG_VERSION"),
     " (by Adorcable on e621 +https://github.com/Xe/withinbot)"
 );
+
+pub struct ClientContainer;
+
+impl TypeMapKey for ClientContainer {
+    type Value = Arc<Mutex<Client>>;
+}
+
+pub fn make_client() -> Arc<Mutex<Client>> {
+    Arc::new(Mutex::new(Client::new(APP_USER_AGENT).unwrap()))
+}
 
 #[check]
 #[name = "nsfw_only"]
@@ -28,6 +39,12 @@ fn nsfw_check(ctx: &mut Context, msg: &Message, _: &mut Args, _: &CommandOptions
     if let Some(chan) = msg.channel(&ctx.cache) {
         if chan.is_nsfw() {
             return Success;
+        }
+    } else {
+        if let Ok(chan) = ctx.http.get_channel(*msg.channel_id.as_u64()) {
+            if chan.is_nsfw() {
+                return Success;
+            }
         }
     }
 
@@ -37,7 +54,9 @@ fn nsfw_check(ctx: &mut Context, msg: &Message, _: &mut Args, _: &CommandOptions
 #[command]
 #[checks(nsfw_only)]
 pub fn search(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
-    let ref cli: Client = Client::new(APP_USER_AGENT)?;
+    let data = ctx.data.read();
+    let value = data.get::<ClientContainer>().unwrap();
+    let ref cli: Client = *value.lock().unwrap();
     let tags = args.raw().collect::<Vec<&str>>();
 
     info!("{} searches for {:?}", msg.author.name, tags);
@@ -62,7 +81,9 @@ pub fn search(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 #[command]
 #[checks(nsfw_only)]
 pub fn get_post(ctx: &mut Context, msg: &Message, mut args: Args) -> CommandResult {
-    let ref cli: Client = Client::new(APP_USER_AGENT)?;
+    let data = ctx.data.read();
+    let value = data.get::<ClientContainer>().unwrap();
+    let ref cli: Client = *value.lock().unwrap();
     let id = args.single::<u64>()?;
 
     info!("{} getting post {}", msg.author.name, id);
@@ -106,33 +127,33 @@ pub fn resolve_links(ctx: &mut Context, msg: &Message) {
         return;
     }
 
-    if let Some(chan) = msg.channel(&ctx.cache) {
+    if let Ok(chan) = msg.channel_id.to_channel(&ctx) {
         if !chan.is_nsfw() {
             return;
         }
     }
 
-    let ref cli: Client = Client::new(APP_USER_AGENT).unwrap();
-    for emb in &msg.embeds {
-        if emb.kind != "image" {
-            continue;
-        }
-        let tn = emb.thumbnail.as_ref().unwrap();
-        if !tn.url.starts_with("https://static1.e621.net/data/") {
-            continue;
-        }
-        let url = Url::parse(tn.url.as_str()).unwrap();
-        let path = std::path::Path::new(url.path());
-        let md5 = path.file_stem().unwrap().to_str().unwrap();
-        let body = cli.get_json_endpoint(&format!("/post/check_md5.json?md5={}", md5));
-        let md5c: MD5Check = serde_json::from_value(body.unwrap()).unwrap();
-        let response = MessageBuilder::new()
-            .push(format!("<https://e621.net/post/show/{}>", md5c.post_id))
-            .build();
+    let data = ctx.data.read();
+    let value = data.get::<ClientContainer>().unwrap();
+    let ref cli: Client = *value.lock().unwrap();
 
-        if let Err(why) = msg.channel_id.say(&ctx.http, &response) {
-            error!("Error sending message: {:?}", why);
-        }
+    if !msg.content.starts_with("https://static1.e621.net/data/") {
+        return;
+    }
+
+    log::debug!("resolving {}", msg.content);
+    let url = Url::parse(&msg.content).unwrap();
+    let path = std::path::Path::new(url.path());
+    let md5 = path.file_stem().unwrap().to_str().unwrap();
+    let body = cli.get_json_endpoint(&format!("/post/check_md5.json?md5={}", md5));
+    let md5c: MD5Check = serde_json::from_value(body.unwrap()).unwrap();
+    let response = MessageBuilder::new()
+        .push(format!("<https://e621.net/post/show/{}>", md5c.post_id))
+        .build();
+
+    log::debug!("replying with {}", response);
+    if let Err(why) = msg.channel_id.say(&ctx.http, &response) {
+        error!("Error sending message: {:?}", why);
     }
 }
 

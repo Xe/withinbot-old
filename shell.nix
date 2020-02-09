@@ -8,6 +8,6 @@ in pkgs.mkShell {
     pkgs.cargo
     pkgs.openssl
     pkgs.pkg-config
-    sources.niv
+    pkgs.niv
   ];
 }

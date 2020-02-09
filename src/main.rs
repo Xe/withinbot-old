@@ -53,6 +53,7 @@ fn main() {
     {
         let mut data = client.data.write();
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
+        data.insert::<ClientContainer>(make_client());
     }
 
     let (owners, bot_id) = match client.cache_and_http.http.get_current_application_info() {

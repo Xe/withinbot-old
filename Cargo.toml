@@ -21,3 +21,6 @@ xe621 = "0.6.2"
 [dependencies.serenity]
 version = "0.8"
 features = ["cache", "framework", "standard_framework", "rustls_backend"]
+
+[profile.release]
+panic = "abort"
