@@ -8,5 +8,6 @@ let
       (path: type: type != "directory" || builtins.baseNameOf path != "target")
       ./.;
     buildInputs = [ pkgs.openssl pkgs.pkg-config ];
+    doCheck = false;
   };
 in pkg
