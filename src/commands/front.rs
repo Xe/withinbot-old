@@ -1,4 +1,4 @@
-use crate::mi::{client::CLIENT, switch::Switch};
+use crate::mi::{client::ClientContainer, switch::Switch};
 use chrono::prelude::*;
 use log::error;
 use serenity::{
@@ -8,10 +8,14 @@ use serenity::{
     utils::MessageBuilder,
 };
 use std::ops::Sub;
+use reqwest::blocking::Client;
 
 #[command]
 pub fn front(ctx: &mut Context, msg: &Message, _args: Args) -> CommandResult {
-    let current_front: Switch = CLIENT
+    let data = ctx.data.read();
+    let value = data.get::<ClientContainer>().unwrap();
+    let ref cli: Client = *value.lock().unwrap();
+    let current_front: Switch = cli
         .get("https://mi.within.website/switches/current")
         .send()?
         .json()?;

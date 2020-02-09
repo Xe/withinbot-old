@@ -29,7 +29,7 @@ impl TypeMapKey for ClientContainer {
     type Value = Arc<Mutex<Client>>;
 }
 
-pub fn make_client() -> Arc<Mutex<Client>> {
+pub fn make() -> Arc<Mutex<Client>> {
     Arc::new(Mutex::new(Client::new(APP_USER_AGENT).unwrap()))
 }
 
