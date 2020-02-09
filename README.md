@@ -6,12 +6,10 @@ nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
 Rust](https://img.shields.io/badge/Written%20in-Rust-orange)
 
 A chatbot for The Sub-Aesthetic Furryhole. It has a few commands and features
-that help with the guild.
+that help with the guild. To invoke the bot, either mention it with a command by
+name or use its prefix `~`.
 
-To invoke the bot, either mention it with a command by name or use its prefix
-`~`.
-
-This 
+This depends on Rust stable and is tested against Rust 1.40.
 
 ## e621 Commands
 
