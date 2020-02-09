@@ -1,5 +1,4 @@
 use log::{error, info};
-use xe621::client::Client;
 use serde::*;
 use serenity::{
     framework::standard::{
@@ -14,6 +13,7 @@ use serenity::{
     utils::MessageBuilder,
 };
 use url::Url;
+use xe621::client::Client;
 
 static APP_USER_AGENT: &str = concat!(
     env!("CARGO_PKG_NAME"),
@@ -114,7 +114,9 @@ pub fn resolve_links(ctx: &mut Context, msg: &Message) {
 
     let ref cli: Client = Client::new(APP_USER_AGENT).unwrap();
     for emb in &msg.embeds {
-        if emb.kind != "image" {continue;}
+        if emb.kind != "image" {
+            continue;
+        }
         let tn = emb.thumbnail.as_ref().unwrap();
         if !tn.url.starts_with("https://static1.e621.net/data/") {
             continue;
