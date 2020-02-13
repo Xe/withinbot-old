@@ -1,14 +1,13 @@
 { system ? builtins.currentSystem }:
 
 let
-  pkgs = import <nixpkgs> { inherit system; };
-
+  sources = import ./nix/sources.nix;
+  pkgs = import sources.nixpkgs { };
   callPackage = pkgs.lib.callPackageWith pkgs;
-
   withinbot = callPackage ./default.nix { };
 
   dockerImage = pkg:
-    pkgs.dockerTools.buildImage {
+    pkgs.dockerTools.buildLayeredImage {
       name = "xena/withinbot";
       tag = pkg.version;
 

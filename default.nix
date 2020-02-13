@@ -1,7 +1,7 @@
 { }:
 let
-  pkgs = import <nixpkgs> { };
   sources = import ./nix/sources.nix;
+  pkgs = import sources.nixpkgs { };
   naersk = pkgs.callPackage sources.naersk { };
   pkg = naersk.buildPackage {
     src = builtins.filterSource

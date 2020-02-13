@@ -24,3 +24,5 @@ features = ["cache", "framework", "standard_framework", "rustls_backend"]
 
 [profile.release]
 panic = "abort"
+lto = true
+debug = 0

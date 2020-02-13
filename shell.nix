@@ -1,14 +1,23 @@
 let
-  pkgs = import <nixpkgs> { };
   sources = import ./nix/sources.nix;
-in pkgs.mkShell {
+  pkgs = import sources.nixpkgs { };
+  niv = (import sources.niv { }).niv;
+in
+with pkgs;
+
+pkgs.mkShell {
   buildInputs = [
-    pkgs.rustc
-    pkgs.rustfmt
-    pkgs.cargo
-    pkgs.openssl
-    pkgs.pkg-config
-    pkgs.niv
-    pkgs.rls
+    # rust dependencies
+    rustc
+    rustfmt
+    cargo
+    rls
+
+    # native dependencies
+    openssl
+    pkg-config
+
+    # tooling
+    niv
   ];
 }
