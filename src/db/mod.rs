@@ -17,7 +17,7 @@ pub fn save_message<'a>(
     sender: &'a str,
     body: &'a str,
 ) -> Result<usize, diesel::result::Error> {
-    use models::{Message, NewMessage};
+    use models::NewMessage;
     use schema::messages;
 
     let new_message = NewMessage {
@@ -36,12 +36,8 @@ pub fn test_and_save(msg: &Message) {
         return;
     }
 
-    log::info!("got here: {}", msg.content);
-
     match url::Url::parse(&msg.content) {
         Ok(url) => {
-            use schema::messages::dsl::*;
-
             let connection = make();
             match save_message(
                 &connection,
@@ -49,9 +45,7 @@ pub fn test_and_save(msg: &Message) {
                 format!("{}", msg.author.id).as_str(),
                 format!("{}", url).as_str(),
             ) {
-                Ok(_) => {
-                    return;
-                }
+                Ok(_) => {}
                 Err(why) => {
                     log::error!("can't save message: {:?}", why);
                 }

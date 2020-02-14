@@ -4,7 +4,7 @@ use log::{error, info};
 use serenity::{
     client::bridge::gateway::ShardManager,
     framework::{standard::macros::group, StandardFramework},
-    model::{event::ResumedEvent, gateway::Ready},
+    model::{channel::Reaction, event::ResumedEvent, gateway::Ready, prelude::ReactionType::*},
     prelude::*,
 };
 use std::{collections::HashSet, env, sync::Arc};
@@ -17,7 +17,6 @@ mod db;
 mod mi;
 
 struct ShardManagerContainer;
-
 impl TypeMapKey for ShardManagerContainer {
     type Value = Arc<Mutex<ShardManager>>;
 }
@@ -31,6 +30,20 @@ impl EventHandler for Handler {
 
     fn resume(&self, _: Context, _: ResumedEvent) {
         info!("Resumed");
+    }
+
+    fn reaction_add(&self, context: Context, reaction: Reaction) {
+        match reaction.emoji {
+            Unicode(emoji) => {
+                match emoji.as_str() {
+                    "🔍" => {
+                        info!("sauce lookup on {}", reaction.message_id);
+                    }
+                    _ => {}
+                }
+            }
+            _ => {}
+        }
     }
 }
 
@@ -76,18 +89,29 @@ fn main() {
         StandardFramework::new()
             .configure(|c| {
                 c.owners(owners)
-                    .prefix("~")
+                    .prefix("^")
                     .on_mention(Some(bot_id))
                     .no_dm_prefix(true)
             })
             .help(&commands::help::MY_HELP)
             .normal_message(|ctx, msg| {
-                commands::e621::resolve_links(ctx, msg);
                 db::test_and_save(msg);
             })
             .unrecognised_command(|ctx, msg, name| {
                 let response = &format!("can't find command {}", name);
                 if let Err(why) = msg.channel_id.say(&ctx.http, response) {
+                    error!("Error sending message: {:?}", why);
+                }
+            })
+            .on_dispatch_error(|_, _, why| {
+                error!("dispatch error: {:?}", why);
+            })
+            .after(|ctx, msg, cmd_name, why| {
+                error!("{}: {:?}", cmd_name, why);
+                if let Err(why) = msg
+                    .channel_id
+                    .say(&ctx.http, &format!("error in {}: {:?}", cmd_name, why))
+                {
                     error!("Error sending message: {:?}", why);
                 }
             })

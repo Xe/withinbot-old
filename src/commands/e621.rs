@@ -126,39 +126,24 @@ pub fn get_post(ctx: &mut Context, msg: &Message, mut args: Args) -> CommandResu
     Ok(())
 }
 
-pub fn resolve_links(ctx: &mut Context, msg: &Message) {
-    if msg.author.bot {
-        return;
-    }
-
-    if let Ok(chan) = msg.channel_id.to_channel(&ctx) {
-        if !chan.is_nsfw() {
-            return;
-        }
-    }
-
+pub fn resolve_link(ctx: Context, link: String) -> Option<String> {
     let data = ctx.data.read();
     let value = data.get::<ClientContainer>().unwrap();
     let ref cli: Client = *value.lock().unwrap();
 
-    if !msg.content.starts_with("https://static1.e621.net/data/") {
-        return;
+    if !link.starts_with("https://static1.e621.net/data/") {
+        return None;
     }
 
-    log::debug!("resolving {}", msg.content);
-    let url = Url::parse(&msg.content).unwrap();
+    log::debug!("resolving {}", link);
+    let url = Url::parse(&link).unwrap();
     let path = std::path::Path::new(url.path());
     let md5 = path.file_stem().unwrap().to_str().unwrap();
     let body = cli.get_json_endpoint(&format!("/post/check_md5.json?md5={}", md5));
     let md5c: MD5Check = serde_json::from_value(body.unwrap()).unwrap();
-    let response = MessageBuilder::new()
+    Some(MessageBuilder::new()
         .push(format!("<https://e621.net/post/show/{}>", md5c.post_id))
-        .build();
-
-    log::debug!("replying with {}", response);
-    if let Err(why) = msg.channel_id.say(&ctx.http, &response) {
-        error!("Error sending message: {:?}", why);
-    }
+        .build())
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

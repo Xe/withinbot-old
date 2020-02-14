@@ -5,6 +5,6 @@ naersk.buildPackage {
   src = builtins.filterSource
     (path: type: type != "directory" || builtins.baseNameOf path != "target")
     ./.;
-  buildInputs = [ pkgs.openssl pkgs.pkg-config ];
+  buildInputs = [ pkgs.openssl pkgs.pkg-config pkgs.sqlite ];
   doCheck = false;
 }
