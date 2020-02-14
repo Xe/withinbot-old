@@ -1,0 +1,23 @@
+#+TITLE: TODO
+
+* General
+** TODO Figure out how to do runtime configuration
+** DONE Data persistence layer of some kind
+   CLOSED: [2020-02-14 Fri 02:24]
+   :LOGBOOK:
+   CLOCK: [2020-02-14 Fri 01:25]--[2020-02-14 Fri 02:23] =>  0:58
+   :END:
++ sqlite?
+
+I'm using [[https://diesel.rs][Diesel]] to do this. Let's see how this pans out.
+** TODO Figure out why the nix build depends on all of the dependent crates
+I thought rust was a compiled language. Might be weirdness due to using naersk
+or it could be the panicinfo crud that plauged me in the webassembly work.
+* E621
+** TODO "safe" mode for not-NSFW channels
++ Append =rating:s= to the search terms?
++ Don't allow anything with higher than =rating:s= to be expanded?
+** TODO cache messages somehow so that people have to react to them to find out more
+*** Find out what it looks like to do reactions in serenity?
+* Voice
+** TODO Some kind of crappy countdown thing for the racing people

@@ -17,8 +17,11 @@ pkgs.mkShell {
     # native dependencies
     openssl
     pkg-config
+    sqlite
 
     # tooling
     niv
   ];
+
+  DATABASE_URL="target/withinbot.db";
 }

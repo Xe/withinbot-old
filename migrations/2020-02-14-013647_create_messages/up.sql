@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS messages
+( id TEXT PRIMARY KEY
+, sender TEXT NOT NULL
+, body TEXT NOT NULL
+);

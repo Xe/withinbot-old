@@ -9,7 +9,11 @@ use serenity::{
 };
 use std::{collections::HashSet, env, sync::Arc};
 
+#[macro_use]
+extern crate diesel;
+
 use commands::{e621::*, front::*, meta::*, owner::*, printerfacts::*};
+mod db;
 mod mi;
 
 struct ShardManagerContainer;
@@ -79,6 +83,13 @@ fn main() {
             .help(&commands::help::MY_HELP)
             .normal_message(|ctx, msg| {
                 commands::e621::resolve_links(ctx, msg);
+                db::test_and_save(msg);
+            })
+            .unrecognised_command(|ctx, msg, name| {
+                let response = &format!("can't find command {}", name);
+                if let Err(why) = msg.channel_id.say(&ctx.http, response) {
+                    error!("Error sending message: {:?}", why);
+                }
             })
             .group(&GENERAL_GROUP)
             .group(&WITHIN_GROUP)
