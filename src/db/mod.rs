@@ -31,6 +31,22 @@ pub fn save_message<'a>(
         .execute(conn)
 }
 
+pub fn get_message(
+    conn: &SqliteConnection,
+    mid: u64,
+) -> Result<models::Message, diesel::result::Error> {
+    use self::schema::messages::dsl::*;
+
+    let id_str = format!("{}", mid);
+    let result = messages.filter(id.eq(&id_str))
+        .limit(1)
+        .load::<models::Message>(conn)?
+        .into_iter()
+        .nth(0).unwrap();
+
+    Ok(result)
+}
+
 pub fn test_and_save(msg: &Message) {
     if !msg.content.starts_with("https://static1.e621.net/data/") {
         return;

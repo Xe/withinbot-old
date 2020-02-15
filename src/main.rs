@@ -32,12 +32,26 @@ impl EventHandler for Handler {
         info!("Resumed");
     }
 
-    fn reaction_add(&self, context: Context, reaction: Reaction) {
+    fn reaction_add(&self, ctx: Context, reaction: Reaction) {
+        let connection = db::make();
         match reaction.emoji {
             Unicode(emoji) => {
                 match emoji.as_str() {
                     "🔍" => {
                         info!("sauce lookup on {}", reaction.message_id);
+                        match db::get_message(&connection, *reaction.message_id.as_u64()) {
+                            Ok(msg) => {
+                                let response = commands::e621::resolve_link(&ctx, msg.body);
+
+                                if let Err(why) = reaction.channel_id.say(&ctx.http, response.unwrap()) {
+                                    error!("Error sending message: {:?}", why);
+                                }
+                            }
+
+                            Err(why) => {
+                                error!("can't get message from sqlite: {:?}", why);
+                            }
+                        }
                     }
                     _ => {}
                 }

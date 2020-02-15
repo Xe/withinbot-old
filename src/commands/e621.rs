@@ -126,7 +126,7 @@ pub fn get_post(ctx: &mut Context, msg: &Message, mut args: Args) -> CommandResu
     Ok(())
 }
 
-pub fn resolve_link(ctx: Context, link: String) -> Option<String> {
+pub fn resolve_link(ctx: &Context, link: String) -> Option<String> {
     let data = ctx.data.read();
     let value = data.get::<ClientContainer>().unwrap();
     let ref cli: Client = *value.lock().unwrap();

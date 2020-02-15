@@ -1,6 +1,6 @@
 table! {
     messages (id) {
-        id -> Nullable<Text>,
+        id -> Text,
         sender -> Text,
         body -> Text,
     }
