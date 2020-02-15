@@ -38,7 +38,7 @@ impl EventHandler for Handler {
             Unicode(emoji) => {
                 match emoji.as_str() {
                     "🔍" => {
-                        info!("sauce lookup on {}", reaction.message_id);
+                        info!("sauce lookup on {}/{}", reaction.channel_id, reaction.message_id);
                         match db::get_message(&connection, *reaction.message_id.as_u64()) {
                             Ok(msg) => {
                                 let response = commands::e621::resolve_link(&ctx, msg.body);

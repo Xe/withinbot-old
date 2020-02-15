@@ -38,37 +38,31 @@ pub fn get_message(
     use self::schema::messages::dsl::*;
 
     let id_str = format!("{}", mid);
-    let result = messages.filter(id.eq(&id_str))
+    let result = messages
+        .filter(id.eq(&id_str))
         .limit(1)
         .load::<models::Message>(conn)?
         .into_iter()
-        .nth(0).unwrap();
+        .nth(0)
+        .unwrap();
 
     Ok(result)
 }
 
 pub fn test_and_save(msg: &Message) {
-    if !msg.content.starts_with("https://static1.e621.net/data/") {
+    if msg.author.bot {
         return;
     }
 
-    match url::Url::parse(&msg.content) {
-        Ok(url) => {
-            let connection = make();
-            match save_message(
-                &connection,
-                format!("{}", msg.id).as_str(),
-                format!("{}", msg.author.id).as_str(),
-                format!("{}", url).as_str(),
-            ) {
-                Ok(_) => {}
-                Err(why) => {
-                    log::error!("can't save message: {:?}", why);
-                }
-            }
-        }
-        Err(why) => {
-            log::error!("can't parse url? {:?}", why);
+    if let Ok(url) = url::Url::parse(&msg.content) {
+        let connection = make();
+        if let Err(why) = save_message(
+            &connection,
+            format!("{}", msg.id).as_str(),
+            format!("{}", msg.author.id).as_str(),
+            format!("{}", url).as_str(),
+        ) {
+            log::error!("can't save message: {:?}", why);
         }
     }
 }
