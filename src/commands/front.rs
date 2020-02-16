@@ -1,6 +1,7 @@
 use crate::mi::{client::ClientContainer, switch::Switch};
 use chrono::prelude::*;
 use log::error;
+use reqwest::blocking::Client;
 use serenity::{
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::*,
@@ -8,7 +9,6 @@ use serenity::{
     utils::MessageBuilder,
 };
 use std::ops::Sub;
-use reqwest::blocking::Client;
 
 #[command]
 pub fn front(ctx: &mut Context, msg: &Message, _args: Args) -> CommandResult {

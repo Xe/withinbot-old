@@ -35,27 +35,29 @@ impl EventHandler for Handler {
     fn reaction_add(&self, ctx: Context, reaction: Reaction) {
         let connection = db::make();
         match reaction.emoji {
-            Unicode(emoji) => {
-                match emoji.as_str() {
-                    "🔍" => {
-                        info!("sauce lookup on {}/{}", reaction.channel_id, reaction.message_id);
-                        match db::get_message(&connection, *reaction.message_id.as_u64()) {
-                            Ok(msg) => {
-                                let response = commands::e621::resolve_link(&ctx, msg.body);
+            Unicode(emoji) => match emoji.as_str() {
+                "🔍" => {
+                    info!(
+                        "sauce lookup on {}/{}",
+                        reaction.channel_id, reaction.message_id
+                    );
+                    match db::get_message(&connection, *reaction.message_id.as_u64()) {
+                        Ok(msg) => {
+                            let response = commands::e621::resolve_link(&ctx, msg.body);
 
-                                if let Err(why) = reaction.channel_id.say(&ctx.http, response.unwrap()) {
-                                    error!("Error sending message: {:?}", why);
-                                }
-                            }
-
-                            Err(why) => {
-                                error!("can't get message from sqlite: {:?}", why);
+                            if let Err(why) = reaction.channel_id.say(&ctx.http, response.unwrap())
+                            {
+                                error!("Error sending message: {:?}", why);
                             }
                         }
+
+                        Err(why) => {
+                            error!("can't get message from sqlite: {:?}", why);
+                        }
                     }
-                    _ => {}
                 }
-            }
+                _ => {}
+            },
             _ => {}
         }
     }
@@ -101,12 +103,7 @@ fn main() {
 
     client.with_framework(
         StandardFramework::new()
-            .configure(|c| {
-                c.owners(owners)
-                    .prefix("^")
-                    .on_mention(Some(bot_id))
-                    .no_dm_prefix(true)
-            })
+            .configure(|c| c.owners(owners).on_mention(Some(bot_id)).no_dm_prefix(true))
             .help(&commands::help::MY_HELP)
             .normal_message(|ctx, msg| {
                 db::test_and_save(msg);
@@ -119,15 +116,6 @@ fn main() {
             })
             .on_dispatch_error(|_, _, why| {
                 error!("dispatch error: {:?}", why);
-            })
-            .after(|ctx, msg, cmd_name, why| {
-                error!("{}: {:?}", cmd_name, why);
-                if let Err(why) = msg
-                    .channel_id
-                    .say(&ctx.http, &format!("error in {}: {:?}", cmd_name, why))
-                {
-                    error!("Error sending message: {:?}", why);
-                }
             })
             .group(&GENERAL_GROUP)
             .group(&WITHIN_GROUP)

@@ -141,9 +141,11 @@ pub fn resolve_link(ctx: &Context, link: String) -> Option<String> {
     let md5 = path.file_stem().unwrap().to_str().unwrap();
     let body = cli.get_json_endpoint(&format!("/post/check_md5.json?md5={}", md5));
     let md5c: MD5Check = serde_json::from_value(body.unwrap()).unwrap();
-    Some(MessageBuilder::new()
-        .push(format!("<https://e621.net/post/show/{}>", md5c.post_id))
-        .build())
+    Some(
+        MessageBuilder::new()
+            .push(format!("<https://e621.net/post/show/{}>", md5c.post_id))
+            .build(),
+    )
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
