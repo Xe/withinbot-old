@@ -76,7 +76,7 @@ struct Within;
 struct E621;
 
 fn main() {
-    let _ = kankyo::load();
+    let _ = kankyo::init();
     env_logger::init();
 
     let token = env::var("DISCORD_TOKEN").expect("Expected a token in the environment");
