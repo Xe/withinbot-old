@@ -8,14 +8,14 @@ stdenv.mkDerivation {
   version = "latest";
   src = ./.;
 
-  buildInputs = [ zig ];
+  buildInputs = [ clang ];
   phases = "buildPhase installPhase";
 
   buildPhase = ''
     cp -rf $src/src/* .
     export XDG_CACHE_HOME=$(pwd)
-    ${zig}/bin/zig c++ -c -Wall -Werror -fpic TurnipPrices.cpp
-    ${zig}/bin/zig c++ -shared -o libstonks.so TurnipPrices.o
+    clang++ -g -c -Wall -Werror -fPIC stonks.cpp
+    clang++ -shared -o libstonks.so stonks.o
   '';
 
   installPhase = ''

@@ -3,6 +3,7 @@ let
   pkgs = import sources.nixpkgs { };
   niv = (import sources.niv { }).niv;
   zig = import ./nix/zig.nix { inherit sources; };
+  stonks = import ./turnips { inherit sources zig; };
 in
 with pkgs;
 
@@ -20,6 +21,7 @@ pkgs.mkShell {
     openssl
     pkg-config
     sqlite
+    stonks
 
     # zig
     zig

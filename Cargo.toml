@@ -17,6 +17,7 @@ chrono = "0.4"
 url = "2.1"
 rand = "0"
 diesel = { version = "1", features = [ "sqlite" ] }
+libc = "0.2.0"
 
 xe621 = { path = "./xe621" }
 

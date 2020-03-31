@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "TurnipPrices.h"
+#include "stonks.h"
 
 // munged from https://github.com/simontime/Resead
 
