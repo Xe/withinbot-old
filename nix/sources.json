@@ -34,5 +34,11 @@
         "type": "tarball",
         "url": "https://github.com/NixOS/nixpkgs-channels/archive/cc1ae9f21b9e0ce998e706a3de1bad0b5259f22d.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "xepkgs": {
+        "ref": "master",
+        "repo": "https://tulpa.dev/Xe/nixpkgs",
+        "rev": "5621d41482bca79d05c97758bb86eeb9099e26c9",
+        "type": "git"
     }
 }
