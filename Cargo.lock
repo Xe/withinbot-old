@@ -1298,9 +1298,9 @@ dependencies = [
 
 [[package]]
 name = "serenity"
-version = "0.8.1"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e35933f2f6fb1212f02bc6bbb1f550128ed07f72d6124fd8e368ed449db96c7"
+checksum = "fc90d6980aba87ee9a4560f0a8c9617cc1cb4046e277336386ca859e71797e5b"
 dependencies = [
  "base64 0.11.0",
  "bitflags",
