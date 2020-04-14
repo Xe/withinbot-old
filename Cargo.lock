@@ -1298,9 +1298,9 @@ dependencies = [
 
 [[package]]
 name = "serenity"
-version = "0.8.2"
+version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc90d6980aba87ee9a4560f0a8c9617cc1cb4046e277336386ca859e71797e5b"
+checksum = "d314db361ec202fd5228a7e718dec877461093fcbdb492d52cb754ddc51adb9f"
 dependencies = [
  "base64 0.11.0",
  "bitflags",
@@ -1620,9 +1620,9 @@ checksum = "05e42f7c18b8f902290b009cde6d651262f956c98bc51bca4cd1d511c9cd85c7"
 
 [[package]]
 name = "uwl"
-version = "0.5.1"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a7ab913a1e7531084274437e24137ef81065a4b7c05a76d4a6311d48bf4ae4d"
+checksum = "f4bf03e0ca70d626ecc4ba6b0763b934b6f2976e8c744088bb3c1d646fbb1ad0"
 
 [[package]]
 name = "vcpkg"
