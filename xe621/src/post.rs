@@ -62,14 +62,14 @@ impl<'a> Iterator for PostIter<'a> {
         if self.chunk.is_empty() {
             // get the JSON
             match self.client.get_json_endpoint(&format!(
-                "/post/index.json?limit={}{}{}",
+                "/posts.json?limit={}{}{}",
                 ITER_CHUNK_SIZE,
                 if let Some(Query { ordered: true, .. }) = self.query {
                     self.page += 1;
                     format!("&page={}", self.page)
                 } else {
                     match self.last_id {
-                        Some(i) => format!("&before_id={}", i),
+                        Some(i) => format!("&page=b{}", i),
                         None => String::new(),
                     }
                 },
@@ -501,7 +501,7 @@ impl Client {
     /// _Note: This function performs a request; it will be subject to a short sleep time to ensure
     /// that the API rate limit isn't exceeded._
     pub fn get_post(&self, id: u64) -> Xe621Result<Post> {
-        let body = self.get_json_endpoint(&format!("/post/show.json?id={}", id))?;
+        let body = self.get_json_endpoint(&format!("/posts/{}.json", id))?;
 
         Post::try_from(&body)
     }
@@ -659,7 +659,7 @@ mod tests {
             mock(
                 "GET",
                 Matcher::Exact(format!(
-                    "/post/index.json?limit={}&page=1&tags={}",
+                    "/posts.json?limit={}&page=1&tags={}",
                     ITER_CHUNK_SIZE, REQ_TAGS
                 )),
             )
@@ -668,7 +668,7 @@ mod tests {
             mock(
                 "GET",
                 Matcher::Exact(format!(
-                    "/post/index.json?limit={}&page=2&tags={}",
+                    "/posts.json?limit={}&page=2&tags={}",
                     ITER_CHUNK_SIZE, REQ_TAGS
                 )),
             )
@@ -716,7 +716,7 @@ mod tests {
         let _m = mock(
             "GET",
             Matcher::Exact(format!(
-                "/post/index.json?limit={}&before_id=1869409&tags=fluffy%20rating%3As",
+                "/posts.json?limit={}&page=b1869409&tags=fluffy%20rating%3As",
                 ITER_CHUNK_SIZE
             )),
         )
@@ -749,7 +749,7 @@ mod tests {
             mock(
                 "GET",
                 Matcher::Exact(format!(
-                    "/post/index.json?limit={}&tags=fluffy%20rating%3As",
+                    "/posts.json?limit={}&tags=fluffy%20rating%3As",
                     ITER_CHUNK_SIZE
                 )),
             )
@@ -793,14 +793,14 @@ mod tests {
         let _m = [
             mock(
                 "GET",
-                Matcher::Exact(format!("/post/index.json?limit={}", ITER_CHUNK_SIZE)),
+                Matcher::Exact(format!("/posts.json?limit={}", ITER_CHUNK_SIZE)),
             )
             .with_body(include_str!("mocked/320_fluffy_rating-s.json"))
             .create(),
             mock(
                 "GET",
                 Matcher::Exact(format!(
-                    "/post/index.json?limit={}&before_id=1869409",
+                    "/posts.json?limit={}&page=b1869409",
                     ITER_CHUNK_SIZE,
                 )),
             )
@@ -823,7 +823,7 @@ mod tests {
         let _m = mock(
             "GET",
             Matcher::Exact(format!(
-                "/post/index.json?limit={}&tags=fluffy%20rating%3As",
+                "/posts.json?limit={}&tags=fluffy%20rating%3As",
                 ITER_CHUNK_SIZE
             )),
         )
@@ -856,7 +856,7 @@ mod tests {
         let _m = mock(
             "GET",
             Matcher::Exact(format!(
-                "/post/index.json?limit={}&tags=fluffy%20rating%3As",
+                "/posts.json?limit={}&tags=fluffy%20rating%3As",
                 ITER_CHUNK_SIZE
             )),
         )
@@ -888,7 +888,7 @@ mod tests {
 
         let _m = mock(
             "GET",
-            Matcher::Exact(format!("/post/index.json?limit={}", ITER_CHUNK_SIZE)),
+            Matcher::Exact(format!("/posts.json?limit={}", ITER_CHUNK_SIZE)),
         )
         .with_body(response)
         .create();
@@ -904,7 +904,7 @@ mod tests {
         let response_json = serde_json::from_str::<JsonValue>(response).unwrap();
         let expected = Post::try_from(&response_json).unwrap();
 
-        let _m = mock("GET", "/post/show.json?id=8595")
+        let _m = mock("GET", "/posts/8595.json")
             .with_body(response)
             .create();
 

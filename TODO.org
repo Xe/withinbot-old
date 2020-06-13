@@ -24,5 +24,9 @@ or it could be the panicinfo crud that plauged me in the webassembly work.
 ** DONE cache messages somehow so that people have to react to them to find out more
    CLOSED: [2020-02-15 Sat 03:47]
 *** Find out what it looks like to do reactions in serenity?
+** TODO adapt to new e621 API
+   :LOGBOOK:
+   CLOCK: [2020-04-04 Sat 14:32]--[2020-04-04 Sat 16:10] =>  1:38
+   :END:
 * Voice
 ** TODO Some kind of crappy countdown thing for the racing people

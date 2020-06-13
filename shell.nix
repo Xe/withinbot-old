@@ -12,12 +12,14 @@ pkgs.mkShell {
     rustc
     rustfmt
     cargo
+    cargo-watch
     rls
 
     # native dependencies
     openssl
     pkg-config
     sqlite
+    diesel-cli
 
     # tooling
     niv

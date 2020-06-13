@@ -660,9 +660,9 @@ dependencies = [
 
 [[package]]
 name = "lock_api"
-version = "0.3.3"
+version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "79b2de95ecb4691949fea4716ca53cdbcfccb2c612e19644a8bad05edcf9f47b"
+checksum = "c4da24a77a3d8a6d4862d95f72e6fdb9c09a643ecdb402d754004a557f2bec75"
 dependencies = [
  "scopeguard",
 ]
@@ -896,6 +896,18 @@ name = "percent-encoding"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4fd5641d01c8f18a23da7b6fe29298ff4b55afcccdf78973b24cf3175fee32e"
+
+[[package]]
+name = "pfacts"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "83abebdb324c30f176d449513f0134bafbf976d5279c6554742599e3996d1629"
+dependencies = [
+ "rand",
+ "serde",
+ "serde_derive",
+ "serde_json",
+]
 
 [[package]]
 name = "pin-project"
@@ -1298,9 +1310,9 @@ dependencies = [
 
 [[package]]
 name = "serenity"
-version = "0.8.1"
+version = "0.8.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e35933f2f6fb1212f02bc6bbb1f550128ed07f72d6124fd8e368ed449db96c7"
+checksum = "ca3dcb21751f749cd60c0779dddb08a8d339d87b79318c536eaf875b3985c22c"
 dependencies = [
  "base64 0.11.0",
  "bitflags",
@@ -1457,6 +1469,18 @@ dependencies = [
  "num_cpus",
  "pin-project-lite",
  "slab",
+ "tokio-macros",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0c3acc6aa564495a0f2e1d59fab677cd7f81a19994cfc7f3ad0e64301560389"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -1620,9 +1644,9 @@ checksum = "05e42f7c18b8f902290b009cde6d651262f956c98bc51bca4cd1d511c9cd85c7"
 
 [[package]]
 name = "uwl"
-version = "0.5.1"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a7ab913a1e7531084274437e24137ef81065a4b7c05a76d4a6311d48bf4ae4d"
+checksum = "f4bf03e0ca70d626ecc4ba6b0763b934b6f2976e8c744088bb3c1d646fbb1ad0"
 
 [[package]]
 name = "vcpkg"
@@ -1810,13 +1834,14 @@ dependencies = [
  "env_logger",
  "kankyo",
  "log",
+ "pfacts",
  "rand",
  "reqwest",
  "serde",
  "serde_json",
  "serenity",
+ "tokio",
  "url",
- "xe621",
 ]
 
 [[package]]

@@ -1,4 +1,3 @@
-pub mod e621;
 pub mod front;
 pub mod help;
 pub mod meta;

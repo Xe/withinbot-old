@@ -12,7 +12,7 @@ use std::{collections::HashSet, env, sync::Arc};
 #[macro_use]
 extern crate diesel;
 
-use commands::{e621::*, front::*, meta::*, owner::*, printerfacts::*};
+use commands::{front::*, meta::*, owner::*, printerfacts::*};
 mod db;
 mod mi;
 
@@ -43,12 +43,7 @@ impl EventHandler for Handler {
                     );
                     match db::get_message(&connection, *reaction.message_id.as_u64()) {
                         Ok(msg) => {
-                            let response = commands::e621::resolve_link(&ctx, msg.body);
-
-                            if let Err(why) = reaction.channel_id.say(&ctx.http, response.unwrap())
-                            {
-                                error!("Error sending message: {:?}", why);
-                            }
+                            info!("TODO(Xe): resolve derpibooru/furbooru links");
                         }
 
                         Err(why) => {
@@ -71,10 +66,6 @@ struct General;
 #[commands(front)]
 struct Within;
 
-#[group]
-#[commands(get_post, search)]
-struct E621;
-
 fn main() {
     let _ = kankyo::init();
     env_logger::init();
@@ -86,7 +77,6 @@ fn main() {
     {
         let mut data = client.data.write();
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
-        data.insert::<ClientContainer>(commands::e621::make());
         data.insert::<mi::client::ClientContainer>(mi::client::make());
         data.insert::<FactsContainer>(commands::printerfacts::make());
     }
@@ -118,8 +108,7 @@ fn main() {
                 error!("dispatch error: {:?}", why);
             })
             .group(&GENERAL_GROUP)
-            .group(&WITHIN_GROUP)
-            .group(&E621_GROUP),
+            .group(&WITHIN_GROUP),
     );
 
     if let Err(why) = client.start() {
